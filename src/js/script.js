@@ -61,8 +61,8 @@
       thisProduct.getElements();
       thisProduct.initAccordin();
       thisProduct.initOrderForm();
-      thisProduct.processOrder();
       thisProduct.initAmountWidget();
+      thisProduct.processOrder();
       console.log('new Product:', thisProduct);
     }
     renderInMenu(){
@@ -134,14 +134,6 @@
         thisProduct.processOrder();
       });
     }
-    initAmountWidget(){
-      const thisProduct = this;
-
-      thisProduct.amountWidget = new amountWidget(thisProduct.amountWidgetElem);
-      thisProduct.amountWidget.addEventListener('update', function(){
-        thisProduct.processOrder();
-      });
-    }
     processOrder() {
       const thisProduct = this;
  
@@ -174,9 +166,9 @@
             price = price - option.price;
           }
           const images = thisProduct.data.images;
-          console.log(image);
+         
           /* END ELSE IF: if option is not selected and option is default */
-          if (optionSelected) {
+        /* if (optionSelected) {
             for(let image of images){
               thisProduct.imageWrapper.classList.add(
                 classNames.menuProduct.imageVisible
@@ -186,41 +178,34 @@
               thisProduct.imageWrapper.classList.remove(
                 classNames.menuProduct.imageVisible
               );}
-          }
+          }*/
         }
         /* END LOOP: for each optionId in param.options */
       }
+
       //multiply price by annout
       price *= thisProduct.amountWidget.value;
       /* END LOOP: for each paramId in thisProduct.data.params */
       thisProduct.priceElem.innerHTML = price;
       /* set the contents of thisProduct.priceElem to be the value of variable price */
     }
-  
-  }
-  class setValue{
-    setValue(value){
-      const thisWidget = this;
+    initAmountWidget(){
+      const thisProduct = this;
 
-      const newValue = parseInt(value);
-
-      //TODO: Add validation
-      if (newValue != value && newValue >= settings.amountWidget.defaultMin && newValue <= settings.amountWidget.defaultMax){
-        thisWidget.value = newValue;
-        thisWidget.annouce();
-      }
-      
-      thisWidget.input.value = thisWidget.value;
+      thisProduct.amountWidget = new AmountWidget(thisProduct.amountWidgetElem);
+      thisProduct.amountWidgetElem.addEventListener('updated', function(){
+        thisProduct.processOrder();
+      });
     }
   }
-  class amountWidget{
+  class AmountWidget{
     constructor(element){
       const thisWidget = this;
 
       thisWidget.getElements(element);
       thisWidget.value = settings.amountWidget.defaultValue;
       thisWidget.setValue(thisWidget.input.value);
-      console.log('AmountWidget:', amountWidget);
+      console.log('AmountWidget:', AmountWidget);
       console.log('constructor arguments:', element);
     }
     getElements(element){
@@ -232,22 +217,38 @@
       thisWidget.linkIncrease = thisWidget.element.querySelector(select.widgets.amount.linkIncrease);
       
     }
+    setValue(value){
+      const thisWidget = this;
+      console.log(value);
+      const newValue = parseInt(value);
+
+      //TODO: Add validation
+      if (newValue != value && newValue >= settings.amountWidget.defaultMin && newValue <= settings.amountWidget.defaultMax){
+        thisWidget.value = newValue;
+        thisWidget.annouce();
+      }
+      
+      thisWidget.input.value = thisWidget.value;
+    }
     initActions(){
       const thisWidget = this;
 
       const input = thisWidget.input;
       input.addEventListener('change', function(){
-        setValue(thisWidget.input.value);
+        thisWidget.setValue(thisWidget.input.value);
       });
       const linkDe = thisWidget.linkDecrease;
       linkDe.addEventListener('click', function(){
         event.preventDefault();
-        setValue(thisWidget.value -1);
+        thisWidget.setValue(thisWidget.value -1);
+        console.log(thisWidget.value);
+
       });
       const linkIn = thisWidget.linkIncrease;
       linkIn.addEventListener('click', function(){
         event.preventDefault();
-        setValue(thisWidget.value +1);
+        thisWidget.setValue(thisWidget.value +1);
+        console.log(thisWidget.value);
       });
     }
     annouce(){
