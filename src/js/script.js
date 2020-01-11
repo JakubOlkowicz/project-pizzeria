@@ -373,6 +373,30 @@
 
     }
   }
+  class CartProduct{
+    constructor(menuProduct, element){
+      const thisCartProduct = this;
+
+      thisCartProduct.id = menuProduct.id;
+      thisCartProduct.name = menuProduct.name;
+      thisCartProduct.price = menuProduct.price;
+      thisCartProduct.priceSingle = menuProduct.priceSingle;
+      thisCartProduct.amount = menuProduct.amount;
+      thisCartProduct.params = JSON.parse(JSON.stringify(menuProduct.params));
+      thisCartProduct.getElements(element);
+      console.log(thisCartProduct);
+    }
+    getElements(element){
+      const thisCartProduct = this;
+
+      thisCartProduct.dom = {};
+      thisCartProduct.dom.wrapper = element;
+      thisCartProduct.dom.amountWidget = thisCartProduct.element.querySelector(select.cartProduct.amountWidget);
+      thisCartProduct.dom.price = thisCartProduct.element.querySelector(select.cartProduct.price);
+      thisCartProduct.dom.edit = thisCartProduct.element.querySelector(select.cartProduct.edit);
+      thisCartProduct.dom.remove = thisCartProduct.element.querySelector(select.cartProduct.remove);
+    }
+  }
   const app = {
     initMenu: function(){
       const thisApp = this;
