@@ -134,9 +134,10 @@
         thisProduct.processOrder();
       });
     }
+    
     processOrder() {
       const thisProduct = this;
- 
+   
       /* read all data from the form (using utils.serializeFormToObject) and save it to const formData */
       const formData = utils.serializeFormToObject(thisProduct.form);
       /* set variable price to equal thisProduct.data.price */
@@ -145,16 +146,15 @@
       for (let paramId in thisProduct.data.params) {
         /* save the element in thisProduct.data.params with key paramId as const param */
         const param = thisProduct.data.params[paramId];
-        
+   
         /* START LOOP: for each optionId in param.options */
         for (let optionId in param.options) {
-          
           /* save the element in param.options with key optionId as const option */
           const option = param.options[optionId];
           /* START IF: if option is selected and option is not default */
           const optionSelected =
-            formData.hasOwnProperty(paramId) &&
-            formData[paramId].indexOf(optionId) > -1;
+              formData.hasOwnProperty(paramId) &&
+              formData[paramId].indexOf(optionId) > -1;
           console.log(paramId);
           if (optionSelected && !option.default) {
             /* add price of option to variable price */
@@ -165,26 +165,25 @@
             /* deduct price of option from price */
             price = price - option.price;
           }
-          const images = thisProduct.data.images;
-         
-          /* END ELSE IF: if option is not selected and option is default */
-        /* if (optionSelected) {
-            for(let image of images){
-              thisProduct.imageWrapper.classList.add(
-                classNames.menuProduct.imageVisible
-              );}
-          } else if (!optionSelected){
-            for(let image of images){
-              thisProduct.imageWrapper.classList.remove(
-                classNames.menuProduct.imageVisible
-              );}
-          }*/
+          const optionImages = thisProduct.imageWrapper.querySelectorAll(
+            '.' + paramId + '-' + optionId
+          );
+   
+          if (optionSelected) {
+            for (let image of optionImages) {
+              image.classList.add(classNames.menuProduct.imageVisible);
+            }
+          } else {
+            for (let image of optionImages) {
+              image.classList.remove(classNames.menuProduct.imageVisible);
+            }
+          }
         }
         /* END LOOP: for each optionId in param.options */
       }
-
+   
       //multiply price by annout
-      price *= thisProduct.amountWidget.value;
+      price = price * thisProduct.amountWidget.value;
       /* END LOOP: for each paramId in thisProduct.data.params */
       thisProduct.priceElem.innerHTML = price;
       /* set the contents of thisProduct.priceElem to be the value of variable price */
@@ -201,62 +200,82 @@
   class AmountWidget{
     constructor(element){
       const thisWidget = this;
-
+ 
+ 
       thisWidget.getElements(element);
+ 
       thisWidget.value = settings.amountWidget.defaultValue;
+ 
+      //console.log('thisWidget.value = ', thisWidget.value);
+ 
       thisWidget.setValue(thisWidget.input.value);
-      console.log('AmountWidget:', AmountWidget);
-      console.log('constructor arguments:', element);
+      thisWidget.initActions(element);
+ 
+      //console.log('AmountWidget: ', thisWidget);
+      //console.log('constructor arguments: ', element);
     }
+ 
     getElements(element){
       const thisWidget = this;
-    
+ 
       thisWidget.element = element;
       thisWidget.input = thisWidget.element.querySelector(select.widgets.amount.input);
       thisWidget.linkDecrease = thisWidget.element.querySelector(select.widgets.amount.linkDecrease);
       thisWidget.linkIncrease = thisWidget.element.querySelector(select.widgets.amount.linkIncrease);
-      
     }
+ 
     setValue(value){
       const thisWidget = this;
-      console.log(value);
+ 
       const newValue = parseInt(value);
-
-      //TODO: Add validation
-      if (newValue != value && newValue >= settings.amountWidget.defaultMin && newValue <= settings.amountWidget.defaultMax){
+ 
+      /* Add validation */
+ 
+ 
+      if(newValue !== thisWidget.value && newValue >= settings.amountWidget.defaultMin && newValue <= settings.amountWidget.defaultMax){
+ 
         thisWidget.value = newValue;
-        thisWidget.annouce();
+        thisWidget.announce();
+ 
       }
-      
+ 
       thisWidget.input.value = thisWidget.value;
+ 
     }
+ 
     initActions(){
       const thisWidget = this;
-
-      const input = thisWidget.input;
-      input.addEventListener('change', function(){
+ 
+ 
+      thisWidget.input.addEventListener('change', function() {
         thisWidget.setValue(thisWidget.input.value);
       });
-      const linkDe = thisWidget.linkDecrease;
-      linkDe.addEventListener('click', function(){
+ 
+      thisWidget.linkDecrease.addEventListener('click', function(event) {
         event.preventDefault();
-        thisWidget.setValue(thisWidget.value -1);
-        console.log(thisWidget.value);
-
+        thisWidget.setValue(thisWidget.value - 1);
       });
-      const linkIn = thisWidget.linkIncrease;
-      linkIn.addEventListener('click', function(){
+ 
+      thisWidget.linkIncrease.addEventListener('click', function(event) {
         event.preventDefault();
-        thisWidget.setValue(thisWidget.value +1);
-        console.log(thisWidget.value);
+        thisWidget.setValue(thisWidget.value + 1);
       });
+ 
+      //console.log('thisWidget.input: ', thisWidget.input);
+      //console.log('thisWidget.linkDecrease: ', thisWidget.linkDecrease);
+      //console.log('thisWidget.linkIncrease: ', thisWidget.linkIncrease);
+ 
     }
-    annouce(){
+ 
+    announce(){
       const thisWidget = this;
-
-      const event = new Event('updated');
+ 
+      const event = new CustomEvent('updated', {
+        bubbles: true
+      });
       thisWidget.element.dispatchEvent(event);
     }
+ 
   }
   const app = {
     initMenu: function(){
