@@ -1,8 +1,9 @@
-import {settings, select, templates, classNames} from './settings.js';
+import {settings, select, classNames} from './settings.js';
 import Product from './componets/Product.js';
 import Cart from './componets/Cart.js';
+import Booking from './componets/Booking.js';
 
-const app = {
+export const app = {
   initPages: function(){
     const thisApp = this;
 
@@ -39,7 +40,6 @@ const app = {
       });
     }
   },
-
   activePage: function(pageId){
     const thisApp = this;
 
@@ -56,7 +56,13 @@ const app = {
       );
     }
   },
+  initBooking: function(){
+    const thisApp = this;
 
+    const widgetContainer = thisApp.querySelector(select.containerOf.booking);
+    const widgetBooking = new Booking(widgetContainer);
+
+  },
   initMenu: function(){
     const thisApp = this;
 
@@ -107,8 +113,10 @@ const app = {
     thisApp.initPages();
     thisApp.initData();
     thisApp.initCart();
+    thisApp.initBooking();
   },   
 };
 app.init();
+
 
 
