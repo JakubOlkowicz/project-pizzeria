@@ -1,4 +1,4 @@
-import {settings, select, classNames} from './settings.js';
+import {settings, select, classNames, } from './settings.js';
 import Product from './componets/Product.js';
 import Cart from './componets/Cart.js';
 import Booking from './componets/Booking.js';
@@ -60,7 +60,7 @@ export const app = {
     const thisApp = this;
 
     const widgetContainer = thisApp.querySelector(select.containerOf.booking);
-    const widgetBooking = new Booking(widgetContainer);
+    thisApp.widgetBooking = new Booking(widgetContainer);
 
   },
   initMenu: function(){

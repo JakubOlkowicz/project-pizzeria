@@ -1,12 +1,13 @@
-import {select, templates} from '..settings';
-import utils from '..utils.js';
-import AmountWidget from 'AmountWidget.js';
+import {select, templates} from '../settings.js';
+import {utils} from '../utils.js';
+import AmountWidget from './AmountWidget.js';
+import {app} from '../app.js';
 
 export class Booking {
   constructor(){
     const thisBooking = this;
-    
-    thisBooking.render(widgetBooking);
+
+    thisBooking.render(app.initBooking);
 
     thisBooking.initWidgets();
   }
