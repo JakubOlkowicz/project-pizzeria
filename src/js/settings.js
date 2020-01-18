@@ -1,4 +1,4 @@
-/* global Handlebars */
+/* global Handlebars, utils, dataSource */ // eslint-disable-line no-unused-vars
 
 export const select = {
   templateOf: {
@@ -11,6 +11,11 @@ export const select = {
     cart: '#cart',
     pages: '#pages',
     booking: '.booking-wrapper',
+  },
+  booking: {
+    peopleAmount: '.people-amount',
+    hoursAmount: '.hours-amount',
+    tables: '.floor-plan .table',
   },
   all: {
     menuProducts: '#product-list > .product',
@@ -41,6 +46,7 @@ export const select = {
       output: '.output',
     },
   },
+
   cart: {
     productList: '.cart__order-summary',
     toggleTrigger: '.cart__summary',
@@ -59,11 +65,11 @@ export const select = {
     edit: '[href="#edit"]',
     remove: '[href="#remove"]',
   },
-  booking: {
-    peopleAmount: '.people-amount',
-    hoursAmount: '.hours-amount',
-    tables: '.floor-plan .table',
-  },
+  // booking: {
+  //   peopleAmount: '.people-amount',
+  //   hoursAmount: '.hours-amount',
+  //   tables: '.floor-plan .table',
+  // },
   nav: {
     links: '.main-nav a',
   },
