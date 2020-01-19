@@ -8,24 +8,24 @@ class HoursPicker extends BaseWidget {
 
     const thisWidget = this;
 
-    thisWidget.dom.input = thisWidget.dom.wrapper.querySelector(select.widgets.datePicker.input);
-    thisWidget.dom.output = thisWidget.dom.wrapper.querySelector(select.widgets.datePicker.input);
-
+    thisWidget.dom.input = thisWidget.dom.wrapper.querySelector(select.widgets.hourPicker.input);
+    thisWidget.dom.output = thisWidget.dom.wrapper.querySelector(select.widgets.hourPicker.output);
     thisWidget.initPlugin();
-    thisWidget.value = thisWidget.dom.input;
+    thisWidget.value = thisWidget.dom.input.value;
   }
-  
+
   initPlugin(){
     const thisWidget = this;
     // eslint-disable-next-line no-undef
     rangeSlider.create(thisWidget.dom.input);
 
     thisWidget.dom.input.addEventListener('input', function(){
-      thisWidget.value = thisWidget.dom.input;
+      thisWidget.value = thisWidget.dom.input.value;
     });
   }
   parseValue(value){
-    return utils.numberToHour(value);
+    utils.numberToHour(value);
+    return value;
   }
   isValid(){
     return true;
