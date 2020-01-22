@@ -70,11 +70,11 @@ export class Booking {
 
     thisBooking.booked = {};
     for(let item of booking){
-      thisBooking.makeBooked(item.data, item.hour, item.duration, item.table);
+      thisBooking.makeBooked(item.date, item.hour, item.duration, item.table);
     }
 
     for(let item of eventCurrent){
-      thisBooking.makeBooked(item.data, item.hour, item.duration, item.table);
+      thisBooking.makeBooked(item.date, item.hour, item.duration, item.table);
     }
 
     const minDate = thisBooking.datePicker.minDate;
@@ -88,7 +88,7 @@ export class Booking {
       }     
     }
     thisBooking.updateDOM();
-    console.log(thisBooking.booked);
+    // console.log(thisBooking.booked);
   }
   makeBooked(date, hour, duration, table){
     const thisBooking = this;
@@ -114,7 +114,7 @@ export class Booking {
 
     thisBooking.date = thisBooking.datePicker.value;
     thisBooking.hour = utils.hourToNumber(thisBooking.hourPicker.value);
-  
+    console.log(thisBooking.hour);
     let allAvailable = false;
 
     if(
@@ -126,9 +126,12 @@ export class Booking {
     }
 
     for(let table of thisBooking.dom.table){
+      // console.log(table);
       let tableId = table.getAttribute(settings.booking.tableIdAttribute);
       if(!isNaN(tableId)){
         tableId = parseInt(tableId);
+        console.log(allAvailable);
+
       }
       if(
         !allAvailable
@@ -181,7 +184,7 @@ export class Booking {
     thisBooking.datePicker = new DataPicker(thisBooking.dom.datePicker);
     thisBooking.hourPicker = new HoursPicker(thisBooking.dom.hourPicker);
   
-    thisBooking.dom.wrapper.addEventListener('update', function(){
+    thisBooking.dom.wrapper.addEventListener('updated', function(){
       thisBooking.updateDOM();
     });
   }
