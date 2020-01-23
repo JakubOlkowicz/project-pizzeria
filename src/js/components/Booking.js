@@ -10,6 +10,7 @@ export class Booking {
  
     thisBooking.render(reservWidgetContainer);
     thisBooking.initWidgets();
+    // thisBooking.bookedTable();
     thisBooking.getData();
   }
  
@@ -111,40 +112,29 @@ export class Booking {
 
   updateDOM(){
     const thisBooking = this;
+    let correctDate = thisBooking.datePicker.value;
 
-    thisBooking.date = thisBooking.datePicker.value;
+    if(Array.isArray(correctDate)){
+      correctDate = utils.dateToStr(correctDate[0]);
+    } 
+
+    thisBooking.date = correctDate;
     thisBooking.hour = utils.hourToNumber(thisBooking.hourPicker.value);
-    console.log(thisBooking.hour);
-    let allAvailable = false;
-
-    if(
-      typeof thisBooking.booked[thisBooking.date] == 'undefined'
-      ||
-      typeof thisBooking.booked[thisBooking.date][thisBooking.hour] == 'undefined'
-    ){
-      allAvailable = true;
-    }
+    console.log(thisBooking.date);
 
     for(let table of thisBooking.dom.table){
-      // console.log(table);
-      let tableId = table.getAttribute(settings.booking.tableIdAttribute);
-      if(!isNaN(tableId)){
-        tableId = parseInt(tableId);
-        console.log(allAvailable);
-
-      }
+      let tableId = parseInt(table.getAttribute(settings.booking.tableIdAttribute));
       if(
-        !allAvailable
-        &&
-        thisBooking.booked[thisBooking.date][thisBooking.hour].includes(tableId) > -1
-      ){
+        typeof thisBooking.booked[thisBooking.date] !== 'undefined' && 
+        typeof thisBooking.booked[thisBooking.date][thisBooking.hour] !== 'undefined' &&
+        thisBooking.booked[thisBooking.date][thisBooking.hour].indexOf(tableId) !== -1){
         table.classList.add(classNames.booking.tableBooked);
+        console.log('dodalem');
       } else {
         table.classList.remove(classNames.booking.tableBooked);
+        console.log('zabralem');
       }
     }
-  
-  
   }
 
   render(bookingContainer) {
@@ -175,6 +165,30 @@ export class Booking {
     thisBooking.dom.table = thisBooking.dom.wrapper.querySelectorAll(
       select.booking.tables
     );
+  }
+  bookedTable(){
+    const thisBooking = this;
+
+    for(let table of thisBooking.dom.table){
+      let tableId = parseInt(table.getAttribute(settings.booking.tableIdAttribute));
+      if( typeof thisBooking.booked[thisBooking.date] !== 'undefined' && 
+      typeof thisBooking.booked[thisBooking.date][thisBooking.hour] !== 'undefined' &&
+      thisBooking.booked[thisBooking.date][thisBooking.hour].indexOf(tableId) !== -1){
+        table.addEventListener('add', function(){
+          table.classList.add(classNames.booking.tableBooked);
+
+        });
+        //wybór jednego z dostępnych stolików
+
+        // usunięcie wyboru stolika przy zmianie daty lub godziny,
+    
+        // wysyłka rezerwacji do API,
+    
+        // uniemożliwienie ponownej rezerwacji tego samego stolika w tym samym terminie.
+  
+  
+      }
+    }
   }
  
   initWidgets() {
