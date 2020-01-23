@@ -10,7 +10,7 @@ export class Booking {
  
     thisBooking.render(reservWidgetContainer);
     thisBooking.initWidgets();
-    // thisBooking.bookedTable();
+    thisBooking.bookedTable();
     thisBooking.getData();
   }
  
@@ -36,7 +36,7 @@ export class Booking {
       ],
     };
 
-    console.log('getData params', params);
+    // console.log('getData params', params);
 
     const urls = {
       booking:      settings.db.url + '/' + settings.db.booking + '?' + params.booking.join('&'),
@@ -60,9 +60,9 @@ export class Booking {
         ]);
       })
       .then(function([booking, eventCurrent, eventsRepeat]){
-        console.log(booking);
-        console.log(eventCurrent);
-        console.log(eventsRepeat);
+        // console.log(booking);
+        // console.log(eventCurrent);
+        // console.log(eventsRepeat);
         thisBooking.parseData(booking, eventCurrent, eventsRepeat);
       });
   }
@@ -71,11 +71,11 @@ export class Booking {
 
     thisBooking.booked = {};
     for(let item of booking){
-      thisBooking.makeBooked(item.date, item.hour, item.duration, item.table);
+      thisBooking.makeBooked(item.data, item.hour, item.duration, item.table);
     }
 
     for(let item of eventCurrent){
-      thisBooking.makeBooked(item.date, item.hour, item.duration, item.table);
+      thisBooking.makeBooked(item.data, item.hour, item.duration, item.table);
     }
 
     const minDate = thisBooking.datePicker.minDate;
@@ -89,7 +89,6 @@ export class Booking {
       }     
     }
     thisBooking.updateDOM();
-    // console.log(thisBooking.booked);
   }
   makeBooked(date, hour, duration, table){
     const thisBooking = this;
@@ -114,25 +113,30 @@ export class Booking {
     const thisBooking = this;
 
     thisBooking.date = thisBooking.datePicker.value;
-    thisBooking.hour = utils.hourToNumber(thisBooking.hourPicker.value);	
+    thisBooking.hour = utils.numberToHour(thisBooking.hourPicker.value);	
     
     let allAvailable = false;	
-
+    console.log(thisBooking.booked);
     if(	
-      typeof thisBooking.booked[thisBooking.date] == 'undefined'	
+      typeof thisBooking.booked[thisBooking.date] === 'undefined'	
       ||	
-      typeof thisBooking.booked[thisBooking.date][thisBooking.hour] == 'undefined'	
+      typeof thisBooking.booked[thisBooking.date][thisBooking.hour] === 'undefined'	
     ){	
       allAvailable = true;	
     }
 
     for(let table of thisBooking.dom.table){
-      let tableId = parseInt(table.getAttribute(settings.booking.tableIdAttribute));
+      let tableId = table.getAttribute(settings.booking.tableIdAttribute);
+      if(!isNaN(tableId)){
+        tableId = parseInt(tableId);
+      }
+      
       if( 
         !allAvailable
         && 
-        thisBooking.booked[thisBooking.date][thisBooking.hour].includes(tableId) > -1
-      ){table.classList.add(classNames.booking.tableBooked);
+        thisBooking.booked[thisBooking.date][thisBooking.hour].includes(tableId))
+      {
+        table.classList.add(classNames.booking.tableBooked);
         console.log('dodalem');
       } else {
         table.classList.remove(classNames.booking.tableBooked);
@@ -173,27 +177,33 @@ export class Booking {
   bookedTable(){
     const thisBooking = this;
 
+    thisBooking.date = thisBooking.datePicker.value;
+    thisBooking.hour = utils.hourToNumber(thisBooking.hourPicker.value);
+
+    const bookedInfo = {};
+
     for(let table of thisBooking.dom.table){
       let tableId = parseInt(table.getAttribute(settings.booking.tableIdAttribute));
-      if( typeof thisBooking.booked[thisBooking.date] !== 'undefined' && 
-      typeof thisBooking.booked[thisBooking.date][thisBooking.hour] !== 'undefined' &&
-      thisBooking.booked[thisBooking.date][thisBooking.hour].indexOf(tableId) !== -1){
-        table.addEventListener('add', function(){
-          table.classList.add(classNames.booking.tableBooked);
-
-        });
-        //wybór jednego z dostępnych stolików
-
-        // usunięcie wyboru stolika przy zmianie daty lub godziny,
-    
-        // wysyłka rezerwacji do API,
-    
-        // uniemożliwienie ponownej rezerwacji tego samego stolika w tym samym terminie.
-  
-  
-      }
+      table.addEventListener('add', function(){
+        table.classList.add(classNames.booking.tableBooked);
+        bookedInfo.tableNumber = tableId;
+        bookedInfo.hour = thisBooking.hour;
+        bookedInfo.date = thisBooking.date;
+      });
+      return bookedInfo;
     }
+    //wybór jednego z dostępnych stolików
+
+    // usunięcie wyboru stolika przy zmianie daty lub godziny,
+    
+    // wysyłka rezerwacji do API,
+    
+    // uniemożliwienie ponownej rezerwacji tego samego stolika w tym samym terminie.
+  
+  
   }
+  
+  
  
   initWidgets() {
     const thisBooking = this;
@@ -207,3 +217,4 @@ export class Booking {
     });
   }
 }
+

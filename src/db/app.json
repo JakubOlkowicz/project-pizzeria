@@ -256,11 +256,11 @@
     }
   ],
   "booking": [{
-    "id": 5,
+    "id": 6,
       "date": "2020-01-22",
       "hour": "18:00",
       "table": 2,
-      "repeat": "daily",
+      "repeat": " ",
       "duration": 2,
       "ppl": 3,
       "starters": ["lemonWater"]
