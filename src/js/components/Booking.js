@@ -112,23 +112,27 @@ export class Booking {
 
   updateDOM(){
     const thisBooking = this;
-    let correctDate = thisBooking.datePicker.value;
 
-    if(Array.isArray(correctDate)){
-      correctDate = utils.dateToStr(correctDate[0]);
-    } 
+    thisBooking.date = thisBooking.datePicker.value;
+    thisBooking.hour = utils.hourToNumber(thisBooking.hourPicker.value);	
+    
+    let allAvailable = false;	
 
-    thisBooking.date = correctDate;
-    thisBooking.hour = utils.hourToNumber(thisBooking.hourPicker.value);
-    console.log(thisBooking.date);
+    if(	
+      typeof thisBooking.booked[thisBooking.date] == 'undefined'	
+      ||	
+      typeof thisBooking.booked[thisBooking.date][thisBooking.hour] == 'undefined'	
+    ){	
+      allAvailable = true;	
+    }
 
     for(let table of thisBooking.dom.table){
       let tableId = parseInt(table.getAttribute(settings.booking.tableIdAttribute));
-      if(
-        typeof thisBooking.booked[thisBooking.date] !== 'undefined' && 
-        typeof thisBooking.booked[thisBooking.date][thisBooking.hour] !== 'undefined' &&
-        thisBooking.booked[thisBooking.date][thisBooking.hour].indexOf(tableId) !== -1){
-        table.classList.add(classNames.booking.tableBooked);
+      if( 
+        !allAvailable
+        && 
+        thisBooking.booked[thisBooking.date][thisBooking.hour].includes(tableId) > -1
+      ){table.classList.add(classNames.booking.tableBooked);
         console.log('dodalem');
       } else {
         table.classList.remove(classNames.booking.tableBooked);
