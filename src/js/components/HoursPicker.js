@@ -24,7 +24,8 @@ class HoursPicker extends BaseWidget {
     });
   }
   parseValue(value){
-    utils.numberToHour(value);
+    // console.log(value);
+    value = utils.numberToHour(value);
     return value;
   }
   isValid(){

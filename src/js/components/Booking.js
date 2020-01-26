@@ -10,8 +10,9 @@ export class Booking {
  
     thisBooking.render(reservWidgetContainer);
     thisBooking.initWidgets();
-    thisBooking.bookedTable();
     thisBooking.getData();
+    thisBooking.bookedTable();
+    thisBooking.sendBooking();
   }
  
   getData(){
@@ -19,7 +20,6 @@ export class Booking {
 
     const startDateParam = settings.db.dateStartParamKey + '=' + utils.dateToStr(thisBooking.datePicker.minDate);
     const endDateParam = settings.db.dateEndParamKey + '=' + utils.dateToStr(thisBooking.datePicker.maxDate);
-
     const params = {
       booking: [
         startDateParam,      
@@ -66,6 +66,7 @@ export class Booking {
         thisBooking.parseData(booking, eventCurrent, eventsRepeat);
       });
   }
+
   parseData(booking, eventCurrent, eventsRepeat){
     const thisBooking = this;
 
@@ -108,15 +109,15 @@ export class Booking {
       thisBooking.booked[date][hourBlock].push(table);
     }
   }
+  
 
   updateDOM(){
     const thisBooking = this;
 
     thisBooking.date = thisBooking.datePicker.value;
-    thisBooking.hour = utils.numberToHour(thisBooking.hourPicker.value);	
-    
+    thisBooking.hour = utils.hourToNumber(thisBooking.hourPicker.value);	
+    // console.log(thisBooking.hour);
     let allAvailable = false;	
-    console.log(thisBooking.booked);
     if(	
       typeof thisBooking.booked[thisBooking.date] === 'undefined'	
       ||	
@@ -130,17 +131,16 @@ export class Booking {
       if(!isNaN(tableId)){
         tableId = parseInt(tableId);
       }
-      
       if( 
         !allAvailable
         && 
         thisBooking.booked[thisBooking.date][thisBooking.hour].includes(tableId))
       {
         table.classList.add(classNames.booking.tableBooked);
-        console.log('dodalem');
+        // console.log('dodalem');
       } else {
         table.classList.remove(classNames.booking.tableBooked);
-        console.log('zabralem');
+        // console.log('zabralem');
       }
     }
   }
@@ -173,38 +173,87 @@ export class Booking {
     thisBooking.dom.table = thisBooking.dom.wrapper.querySelectorAll(
       select.booking.tables
     );
+    thisBooking.dom.bookButton = thisBooking.dom.wrapper.querySelector(
+      select.booking.bookButton
+    );
+    thisBooking.dom.address = thisBooking.dom.wrapper.querySelector(
+      select.booking.address
+    );
+    thisBooking.dom.phone = thisBooking.dom.wrapper.querySelector(
+      select.booking.phone
+    );
+    thisBooking.dom.starters = thisBooking.dom.wrapper.querySelectorAll(
+      select.booking.starters
+    );
   }
   bookedTable(){
+    //wybór jednego z dostępnych stolików
+    // usunięcie wyboru stolika przy zmianie daty lub godziny,
     const thisBooking = this;
 
-    thisBooking.date = thisBooking.datePicker.value;
-    thisBooking.hour = utils.hourToNumber(thisBooking.hourPicker.value);
-
-    const bookedInfo = {};
-
     for(let table of thisBooking.dom.table){
-      let tableId = parseInt(table.getAttribute(settings.booking.tableIdAttribute));
-      table.addEventListener('add', function(){
-        table.classList.add(classNames.booking.tableBooked);
-        bookedInfo.tableNumber = tableId;
-        bookedInfo.hour = thisBooking.hour;
-        bookedInfo.date = thisBooking.date;
+      table.addEventListener('click', function(){
+        console.log('click');
+        table.classList.add(classNames.booking.tableBooked, classNames.booking.bookedClick);
       });
-      return bookedInfo;
     }
-    //wybór jednego z dostępnych stolików
-
-    // usunięcie wyboru stolika przy zmianie daty lub godziny,
-    
-    // wysyłka rezerwacji do API,
-    
-    // uniemożliwienie ponownej rezerwacji tego samego stolika w tym samym terminie.
-  
-  
   }
+  bookingInfo(){
+    const thisBooking = this;
+    const payload = {
+      date: thisBooking.datePicker.value,
+      hour: thisBooking.hourPicker.value,
+      duration: thisBooking.hoursAmount.value,
+      peopleAmount: thisBooking.peopleAmount.value,
+      bookingAddress: thisBooking.dom.address.value,
+      bookingPhone: thisBooking.dom.phone.value,
+      table: [],
+      starters: [],
+    };
+    for(let starter of thisBooking.dom.starters){
+      console.log(starter);
+      if(starter.checked === true){
+        payload.starters.push(starter.value);
+      }
+    }
+    for(let table of thisBooking.dom.table){
+      if(table.classList.contains(classNames.booking.loading)){
+        let tableId = parseInt(table.getAttribute(settings.booking.tableIdAttribute));
+        payload.table.push(tableId);
+      }
+    }
+    
+    return payload;
+  }
+  sendBooking(){
+    // wysyłka rezerwacji do API,    
   
+    // uniemożliwienie ponownej rezerwacji tego samego stolika w tym samym terminie.
+
+    const thisBooking = this;
+    const url = settings.db.url + '/' + settings.db.booking;
+    thisBooking.dom.bookButton.addEventListener('click', function(event){
+      event.preventDefault();
+      const options = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(thisBooking.bookingInfo()),
+      };
   
- 
+      fetch(url, options)
+        .then(function(response){
+          return response.json();
+        }).then(function(parsedResponse){
+          console.log('parsedResponse', parsedResponse);
+          for(let table of parsedResponse.table){
+            thisBooking.makeBooked(parsedResponse.date, parsedResponse.hour, parsedResponse.duration, table);
+          }
+        });
+    });
+  }
+
   initWidgets() {
     const thisBooking = this;
     thisBooking.peopleAmount = new AmountWidget(thisBooking.dom.peopleAmount);
@@ -214,7 +263,6 @@ export class Booking {
   
     thisBooking.dom.wrapper.addEventListener('updated', function(){
       thisBooking.updateDOM();
-    });
+    }); 
   }
 }
-
