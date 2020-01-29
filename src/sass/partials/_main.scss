@@ -1,0 +1,140 @@
+.main-wrapper {
+  margin: 50px 300px(auto);
+  padding: ($base-size * 4) ($base-size * 4);
+  background: $color-light;
+  border-bottom: 1px solid lighten($color-dark, 70%);
+  border-radius: $radius;
+}
+
+.button{
+  width: 100%;
+  margin: 0    
+}
+
+.col{
+  padding: 0 2.5px;
+  .main{
+    width: 100%;
+    height: 100px;
+    border: none;
+    color: $color-light;
+    font-size: 48px;
+    font-family: "Oswald", sans-serif;
+    font-weight: 300;
+    text-transform: uppercase;
+    transition: display;
+    transition-duration: 1.2s;    
+    transition-timing-function: ease-in-out;  
+    }
+    .main:hover{
+        p{
+          display: block;
+        }
+    }
+    .left{
+      background:url(/images/assets/pizza-1.jpg) no-repeat;
+      background-size: cover;
+      background-position: center;
+      border-radius: 4px;
+    }
+    .right{
+      background:url(/images/assets/pizza-2.jpg) no-repeat;
+      background-size: cover;
+      background-position: center;
+      border-radius: 4px;
+    }
+    p{
+        display: none;
+        font-size: $base-size;
+    }
+}
+.multiple-items{
+  margin: 100px 0;
+}  
+.hours{
+  background: $color-main;
+  width: 100%;
+  height: 100px;
+  text-align: center;
+  padding: 10px 0;
+  border-radius: 4px;
+  margin: 2.5px;
+  span{
+    color: $color-light;
+    font-size: 2rem;
+    font-family: "Oswald", sans-serif;
+    text-transform: uppercase;
+    }    
+    p{
+      color: $color-light;
+      display: block;
+    }
+}
+.opinion-image{
+  padding: 30px 10px;
+  img{
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    }
+}
+.opinion{
+  padding: 30px 10px;
+  text-align: left;
+  color: $color-dark;
+  span{
+    font-style: italic;
+    margin-top: 5px;
+    }
+}
+.gallery{
+  max-width: 300px;
+  height: 200px;
+  overflow: hidden;  
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 10px;
+  margin-top: 10px;
+  padding: 0;
+  img{
+    width: 100%;
+    height: auto; 
+    }
+
+  .overlay {
+    position: absolute;
+    padding: 0 15px;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    transition: .5s ease;
+    background-color: $color-dark ;
+    i{
+        margin: 10px;
+        position: absolute;
+        font-size: $base-size * 3;
+        visibility: hidden;
+        opacity: 0;
+        transition: opacity .2s, visibility .2s,;
+        z-index: 2;
+    }
+  }
+}
+.gallery:hover{
+    i{
+        visibility: visible;
+        opacity: 1;
+        color: $color-main;
+    }
+    .overlay {
+        opacity: 0.5;
+    }
+}
+
+      

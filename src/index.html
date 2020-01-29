@@ -7,7 +7,10 @@
   <title>Pizzeria</title>
   <link href="https://fonts.googleapis.com/css?family=Lato:400,300i,700%7COswald:300,500,700&amp;subset=latin-ext" rel="stylesheet">
   <link href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" rel="stylesheet">
-  <link rel="stylesheet" href="vendor/range-slider.min.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="slick/slick.css"/>
+  <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+  <link rel="stylesheet" type="text/css" href="slick/slick-theme.css"/>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -61,6 +64,118 @@
   </header>
 
   <div id="pages">
+    <section id="main" >
+      <div class="main-wrapper">     
+       <div class="container ">
+        <div class="row button">
+          <div class="col">
+            <button type="image" href="#order" class="main left">
+              <h2>ORDER ONLINE</h2>
+              <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit.</p>
+            </button>
+          </div>
+          <div class="col">
+            <button type="image" href="#booking" class="main right">
+              <h2>BOOK A TABLE</h2>
+              <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit.</p>
+            </button>
+          </div>
+        </div>
+        <div class="row button">
+          <div class="col hours">
+            <span>OPENING HOURS:</span>
+            <p>TUE-SUN, 12PM-12AM</p>
+          </div>
+        </div>
+      </div>
+      <div class="container multiple-items ">
+          <div class="opinion-image ">
+            <img src="/images/assets/pizza-3.jpg" alt="pizza-3">
+          </div>
+          <div class="opinion ">
+            <h4>Nice Pizza</h4>
+            <br>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. 
+              Labore eaque aperiam saepe deserunt error, dicta molestiae cupiditate aliquam ex
+            </p>
+            <span>
+              - H.P. Lovecraft
+            </span>
+          </div>
+          <div class="opinion-image ">
+            <img src="/images/assets/pizza-4.jpg" alt="pizza-4">
+          </div>
+          <div class="opinion ">
+            <h4>Nice Souse</h4>
+            <br>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. 
+              Labore eaque aperiam saepe deserunt error, dicta molestiae cupiditate aliquam ex
+            </p>
+            <span>
+              - Sir Arthur Conan Doyle
+            </span>
+          </div>
+          <div class="opinion-image">
+            <img src="/images/assets/pizza-5.jpg" alt="pizza-5">
+          </div>
+          <div class="opinion">
+            <h4>Nice Salad</h4>
+            <br>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. 
+              Labore eaque aperiam saepe deserunt error, dicta molestiae cupiditate aliquam ex
+            </p>
+            <span>
+              - Alexandre Dumas
+            </span> 
+          </div>
+      </div>
+      <div class="container">
+          <div class="row">
+            <div class="gallery col-4 col-sm-6 ">
+              <img src="/images/assets/pizza-5.jpg" alt="pizza-5">
+              <div class="overlay">
+                <i class="fab fa-instagram"></i>
+                <i class="fas fa-share-alt"></i>
+              </div>
+            </div>
+            <div class="gallery col-4 col-sm-6 ">
+              <img src="/images/assets/pizza-6.jpg" alt="pizza-6">
+              <div class="overlay">
+                <i class="fab fa-instagram"></i>
+                <i class="fas fa-share-alt"></i>
+              </div>
+            </div>
+            <div class="gallery col-4 col-sm-6 ">
+              <img src="/images/assets/pizza-7.jpg" alt="pizza-7">
+              <div class="overlay">
+                <i class="fab fa-instagram"></i>
+                <i class="fas fa-share-alt"></i>
+              </div>
+            </div>
+            <div class="gallery col-4 col-sm-6 ">
+              <img src="/images/assets/pizza-4.jpg" alt="pizza-8">
+              <div class="overlay">
+                <i class="fab fa-instagram"></i>
+                <i class="fas fa-share-alt"></i>
+              </div>
+            </div>
+            <div class="gallery col-4 col-sm-6 ">
+              <img src="/images/assets/pizza-9.jpg" alt="pizza-9">
+              <div class="overlay">
+                <i class="fab fa-instagram"></i>
+                <i class="fas fa-share-alt"></i>
+              </div>
+            </div>
+            <div class="gallery col-4 col-sm-6 ">
+              <img src="/images/assets/pizza-3.jpg" alt="pizza-6">
+              <div class="overlay">
+                <i class="fab fa-instagram"></i>
+                <i class="fas fa-share-alt"></i>
+              </div>
+            </div>
+          </div>
+      </div>
+    </section>
     <section id="order">
       <div id="product-list" class="product-list container"></div>
     </section>
@@ -241,7 +356,17 @@
 
     </article> <!-- .product -->
   </script>
-
+  <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+  <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+  <script type="text/javascript" src="slick/slick.min.js"></script>
+  <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+  <script type="text/javascript">
+    $('.multiple-items').slick({
+    infinite: true,
+    slidesToShow: 2,
+    slidesToScroll: 2,
+  });
+  </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.0/handlebars.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script> 
   <script src="vendor/range-slider.min.js"></script>
