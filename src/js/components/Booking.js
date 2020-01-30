@@ -142,6 +142,7 @@ export class Booking {
         // console.log('zabralem');
       }
     }
+    thisBooking.multiColor();
   }
 
   render(bookingContainer) {
@@ -264,4 +265,32 @@ export class Booking {
       thisBooking.updateDOM();
     }); 
   }
+  multiColor(){
+    const thisBooking = this;
+    /* Odczytać datę z datePicker */
+    const bookedHours = thisBooking.booked[thisBooking.date];
+    // console.log(thisBooking.booked[thisBooking.date]);
+    const sliderColor = [];
+    /* wyliczyć % dla paska ze wszytskich godzin */
+    thisBooking.rangeSlider = document.querySelector('.rangeSlider');
+    /* pętla dla wszytskich godzin z tej daty */
+    for(let bookedHour in bookedHours) {
+      const first = ((bookedHour - 12) * 100) / 12;
+      const firstAndHalf = (((bookedHour - 12)+ .5) * 100) /12;
+      /* warunki dla stolików kolory  */
+      if (bookedHours[bookedHour].length <= 1) {
+        sliderColor.push('/*' + bookedHour + '*/green ' + first + '%, green ' + firstAndHalf + '%');
+      } else if (bookedHours[bookedHour].length === 2) {
+        sliderColor.push('/*' + bookedHour + '*/orange ' + first + '%, orange ' + firstAndHalf + '% ');
+      } else if (bookedHours[bookedHour].length === 3) {
+        sliderColor.push('/*' + bookedHour + '*/red ' + first + '%, red ' + firstAndHalf + '%');
+      }
+    }
+    sliderColor.sort();
+    const colors = sliderColor.join();
+    thisBooking.rangeSlider.style.background = 'linear-gradient(to right, ' + colors + ')';
+  }
+  
+
+  
 }
