@@ -75,7 +75,7 @@ export const select = {
   //   tables: '.floor-plan .table',
   // },
   nav: {
-    links: '.main-nav .col button',
+    links: '.click',
   },
 };
 

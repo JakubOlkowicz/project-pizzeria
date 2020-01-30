@@ -1,6 +1,6 @@
 .main-wrapper {
   max-width:800px;
-  margin: 50px 350px(auto);
+  margin: ($base-size * 3.5) auto;
   padding: ($base-size * 4) ($base-size * 4);
   background: $color-light;
   border-bottom: 1px solid lighten($color-dark, 70%);
